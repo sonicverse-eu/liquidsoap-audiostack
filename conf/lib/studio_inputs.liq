@@ -20,16 +20,18 @@ def create_studio_input(~mount, ~port) =
 
   # on_connect/on_disconnect callbacks receive at least one argument (connection info)
   # we ignore the argument but must accept it to satisfy the expected type
+  # on_connect expects a callback that receives connection info; accept and ignore it
   studio.on_connect(fun (_) -> log_event(mount, "connected"), synchronous=false)
+  # on_disconnect expects a zero-argument callback
   studio.on_disconnect(
-    fun (_) -> log_event(mount, "disconnected"),
+    fun () -> log_event(mount, "disconnected"),
     synchronous=false
   )
 
   # Create version with silence detection and stripping
   studio_with_detect =
     blank.detect(
-      id="detect_#{id}",
+      id="detect_#{mount}",
       max_blank=SILENCE_SWITCH_SECONDS,
       min_noise=AUDIO_VALID_SECONDS,
       studio
