@@ -44,7 +44,7 @@ LIQUIDSOAP_LIB_STUDIO_INPUTS_URL="${GITHUB_BASE}/conf/lib/studio_inputs.liq"
 LIQUIDSOAP_LIB_ICECAST_OUTPUTS_URL="${GITHUB_BASE}/conf/lib/icecast_outputs.liq"
 
 AUDIO_FALLBACK_URL="https://audiofiles.breezeradio.nl/nood/noodband.wav"
-AUDIO_FALLBACK_PATH="${INSTALL_DIR}/audio/fallback.ogg"
+AUDIO_FALLBACK_PATH="${INSTALL_DIR}/audio/noodband.wav"
 
 SILENCE_DETECTION_PATH="${INSTALL_DIR}/silence_detection.txt"
 
