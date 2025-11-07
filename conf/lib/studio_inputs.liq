@@ -1,23 +1,22 @@
 # Studio inputs configuration - common for all stations
 
+# Listen on all hostnames
+settings.harbor.bind_addrs := ["0.0.0.0"]
+
 # Get SRT passphrase for encryption
-SRT_PASSPHRASE = environment.get("SRT_PASSPHRASE")
+ICECAST_PASS = environment.get("ICECAST_PASS")
+
 
 # Note: SILENCE_CONTROL_PATH and is_silence_detection_enabled() are defined in defaults.liq
 
 # Function to create a studio SRT input with silence detection and buffering
-def create_studio_input(~id, ~port) =
-  # Create SRT input
+def create_studio_input(~mount, ~port) =
+  # Create Icecast Input
   studio =
-    input.srt(
-      id=id,
-      port=port,
-      mode="listener",
-      max=10.0,
-      streamid=id,
-      enforced_encryption=true,
-      passphrase=SRT_PASSPHRASE
-    )
+      input.harbor(
+        password=ICECAST_PASS
+        )
+
   studio.on_connect(fun () -> log_event(id, "connected"), synchronous=false)
   studio.on_disconnect(
     fun () -> log_event(id, "disconnected"),
