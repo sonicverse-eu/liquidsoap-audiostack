@@ -56,6 +56,8 @@ DIRECTORIES=(
   "${INSTALL_DIR}/scripts"
   "${INSTALL_DIR}/scripts/lib"
   "${INSTALL_DIR}/audio"
+  "${INSTALL_DIR}/icecast/config"
+  "${INSTALL_DIR}/icecast/log"
 )
 OS_ARCH=$(dpkg --print-architecture)
 
@@ -97,6 +99,27 @@ echo -e "${BLUE}►► Creating directories...${NC}"
 for dir in "${DIRECTORIES[@]}"; do
   mkdir -p "${dir}"
 done
+
+# Try to determine the numeric UID:GID used by the liquidsoap image so we can
+# chown the installed files to the container user (avoids permission issues with
+# non-root container users). This is best-effort and will fall back to 100:101.
+LIQUIDSOAP_IMAGE="ghcr.io/sonicverse-eu/liquidsoap-audiostack:latest"
+CONTAINER_UID=100
+CONTAINER_GID=101
+if command -v docker >/dev/null 2>&1; then
+  # Run a short sh command as the image entrypoint to ask for the uid/gid. Use
+  # --entrypoint to override the default entrypoint.
+  uid=$(docker run --rm --entrypoint sh "${LIQUIDSOAP_IMAGE}" -c 'id -u liquidsoap 2>/dev/null || echo 100' 2>/dev/null || echo 100)
+  gid=$(docker run --rm --entrypoint sh "${LIQUIDSOAP_IMAGE}" -c 'id -g liquidsoap 2>/dev/null || echo 101' 2>/dev/null || echo 101)
+  # validate numeric
+  if [[ "${uid}" =~ ^[0-9]+$ ]] && [[ "${gid}" =~ ^[0-9]+$ ]]; then
+    CONTAINER_UID=${uid}
+    CONTAINER_GID=${gid}
+  fi
+fi
+
+# Ensure install dir ownership so the non-root container user can read files
+chown -R ${CONTAINER_UID}:${CONTAINER_GID} "${INSTALL_DIR}" 2>/dev/null || true
 
 # Backup and download configuration files
 echo -e "${BLUE}►► Downloading configuration files...${NC}"
