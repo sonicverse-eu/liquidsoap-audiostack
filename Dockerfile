@@ -1,4 +1,7 @@
 ARG LIQUIDSOAP_VERSION=2.4.0
 FROM savonet/liquidsoap:v${LIQUIDSOAP_VERSION}
 
+TARGETARCH=linux-x86_64
+
+
 USER liquidsoap
