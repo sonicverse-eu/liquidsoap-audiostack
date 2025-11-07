@@ -24,7 +24,7 @@ DOCKER_COMPOSE_URL="${GITHUB_BASE}/docker-compose.yml"
 DOCKER_COMPOSE_PATH="${INSTALL_DIR}/docker-compose.yml"
 
 # Liquidsoap configuration
-LIQUIDSOAP_CONFIG_URL_BREEZE="${GITHUB_BASE}/conf/radio.breeze.liq"
+LIQUIDSOAP_CONFIG_URL_BREEZE="${GITHUB_BASE}/conf/breeze.liq"
 
 LIQUIDSOAP_CONFIG_PATH="${INSTALL_DIR}/scripts/radio.liq"
 
