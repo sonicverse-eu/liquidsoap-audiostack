@@ -10,10 +10,11 @@ ICECAST_PASS = environment.get("ICECAST_PASS")
 # Note: SILENCE_CONTROL_PATH and is_silence_detection_enabled() are defined in defaults.liq
 
 # Function to create a studio SRT input with silence detection and buffering
-def create_studio_input(~mount, ~port) =
+def create_studio_input(~port) =
   # Create Icecast Input
   studio =
       input.harbor(
+        "live"
         password=ICECAST_PASS
         )
 
