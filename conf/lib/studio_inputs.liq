@@ -10,17 +10,17 @@ ICECAST_PASS = environment.get("ICECAST_PASS")
 # Note: SILENCE_CONTROL_PATH and is_silence_detection_enabled() are defined in defaults.liq
 
 # Function to create a studio SRT input with silence detection and buffering
-def create_studio_input(~port) =
+def create_studio_input(~mount, ~port) =
   # Create Icecast Input
   studio =
       input.harbor(
-        "live"
+        "live",
         password=ICECAST_PASS
-        )
+      )
 
-  studio.on_connect(fun () -> log_event(id, "connected"), synchronous=false)
+  studio.on_connect(fun () -> log_event(mount, "connected"), synchronous=false)
   studio.on_disconnect(
-    fun () -> log_event(id, "disconnected"),
+    fun () -> log_event(mount, "disconnected"),
     synchronous=false
   )
 
@@ -49,7 +49,7 @@ def create_studio_input(~port) =
             level_strs
           )
         log_event(
-          id,
+          mount,
           "silence detected (#{db_str} dB)"
         )
       end
@@ -69,7 +69,7 @@ def create_studio_input(~port) =
             level_strs
           )
         log_event(
-          id,
+          mount,
           "audio resumed (#{db_str} dB)"
         )
       end
@@ -77,16 +77,16 @@ def create_studio_input(~port) =
 
   studio_stripped =
     blank.strip(
-      id="stripped_#{id}",
-      max_blank=SILENCE_SWITCH_SECONDS,
-      min_noise=AUDIO_VALID_SECONDS,
-      studio_with_detect
+      id="stripped_#{mount}",
+        max_blank=SILENCE_SWITCH_SECONDS,
+        min_noise=AUDIO_VALID_SECONDS,
+        studio_with_detect
     )
 
   # Use switch to select between stripped version and original
   studio_switchable =
     switch(
-      id="switch_silence_#{id}",
+      id="switch_silence_#{mount}",
       track_sensitive=false,
       [
         ({is_silence_detection_enabled()}, studio_stripped),
@@ -96,5 +96,5 @@ def create_studio_input(~port) =
     )
 
   # Buffer to prevent connection/disconnection latency impact
-  buffer(id="buffered_#{id}", fallible=true, studio_switchable)
+  buffer(id="buffered_#{mount}", fallible=true, studio_switchable)
 end
