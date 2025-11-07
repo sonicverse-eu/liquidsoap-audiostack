@@ -10,6 +10,8 @@ services:
       - ./silence_detection.txt:/silence_detection.txt
     environment:
       - TZ=Europe/Amsterdam
+      - ICECAST_HOST=icecast
+      - ICECAST_PORT=8000
     env_file:
       - .env
     ports:
@@ -18,3 +20,16 @@ services:
     command: /scripts/radio.liq
     restart: unless-stopped
     user: "liquidsoap:liquidsoap"
+
+  icecast:
+    image: lscr.io/linuxserver/icecast:latest
+    container_name: icecast
+    environment:
+      - TZ=Europe/Amsterdam
+      - ICECAST_SOURCE_PASSWORD=${ICECAST_SOURCE_PASSWORD}
+    volumes:
+      - ./icecast/config:/config
+      - ./icecast/log:/config/log
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
