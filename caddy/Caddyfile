@@ -1,0 +1,10 @@
+{env.ICECAST_HOSTNAME}
+    reverse_proxy /* http://icecast:8000 {
+        header_up Host {http.request.host}
+        header_up X-Forwarded-Proto {http.request.scheme}
+    }
+    encode gzip
+    log {
+        output file /data/access.log
+        format single_field common_log
+    }

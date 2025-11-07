@@ -15,9 +15,23 @@ services:
     env_file:
       - .env
     ports:
-      - '0.0.0.0:8888:8888/udp' # SRT Input 1
-      - '0.0.0.0:9999:9999/udp' # SRT Input 2
+      - '0.0.0.0:8888:8888/tcp'
+      - '0.0.0.0:9999:9999/tcp'
     command: /scripts/radio.liq
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+    environment:
+      - ICECAST_HOSTNAME=${ICECAST_HOSTNAME}
     restart: unless-stopped
     user: "liquidsoap:liquidsoap"
 

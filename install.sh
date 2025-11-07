@@ -58,6 +58,8 @@ DIRECTORIES=(
   "${INSTALL_DIR}/audio"
   "${INSTALL_DIR}/icecast/config"
   "${INSTALL_DIR}/icecast/log"
+  "${INSTALL_DIR}/caddy/config"
+  "${INSTALL_DIR}/caddy/data"
 )
 OS_ARCH=$(dpkg --print-architecture)
 
@@ -145,6 +147,22 @@ fi
 
 if ! download_file "${LIQUIDSOAP_ENV_URL}" "${LIQUIDSOAP_ENV_PATH}" "Liquidsoap env for ${STATION_CONFIG}" backup; then
   exit 1
+fi
+
+# Ensure caddy directories exist for Let's Encrypt (Caddy) configuration
+mkdir -p "${INSTALL_DIR}/caddy/config" "${INSTALL_DIR}/caddy/data"
+
+# If ICECAST_HOSTNAME is not present in the downloaded .env, append a sensible default
+if [ -f "${LIQUIDSOAP_ENV_PATH}" ] && ! grep -q '^ICECAST_HOSTNAME=' "${LIQUIDSOAP_ENV_PATH}"; then
+  # Try to get the system FQDN, fall back to example.org
+  HOSTNAME_FQDN=$(hostname -f 2>/dev/null || true)
+  if [ -z "${HOSTNAME_FQDN}" ]; then
+    HOSTNAME_FQDN="example.org"
+  fi
+  echo "ICECAST_HOSTNAME=${HOSTNAME_FQDN}" >> "${LIQUIDSOAP_ENV_PATH}"
+  echo -e "${GREEN}Added ICECAST_HOSTNAME=${HOSTNAME_FQDN} to ${LIQUIDSOAP_ENV_PATH}${NC}"
+  # Ensure ownership matches container user
+  chown ${CONTAINER_UID}:${CONTAINER_GID} "${LIQUIDSOAP_ENV_PATH}" 2>/dev/null || true
 fi
 
 if ! download_file "${DOCKER_COMPOSE_URL}" "${DOCKER_COMPOSE_PATH}" "docker-compose.yml" backup; then
