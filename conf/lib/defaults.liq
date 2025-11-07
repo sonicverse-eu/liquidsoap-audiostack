@@ -41,19 +41,11 @@ ICECAST_BITRATE_AAC_HIGH =
 
 # SRT studio input ports
 # Override these in .env if needed
-SRT_PORT_PRIMARY =
-  int_of_string(environment.get("SRT_PORT_PRIMARY", default="8888"))
-SRT_PORT_SECONDARY =
-  int_of_string(environment.get("SRT_PORT_SECONDARY", default="9999"))
+ICECAST_PORT_PRIMARY =
+  int_of_string(environment.get("ICECAST_PORT_PRIMARY", default="8888"))
+ICECAST_PORT_SECONDARY =
+  int_of_string(environment.get("ICECAST_PORT_SECONDARY", default="9999"))
 
-# DAB+ configuration (optional)
-# Only set these if you want DAB+ output
-DAB_BITRATE = environment.get("DAB_BITRATE", default="")
-DAB_EDI_DESTINATIONS = environment.get("DAB_EDI_DESTINATIONS", default="")
-DAB_METADATA_SOCKET = environment.get("DAB_METADATA_SOCKET", default="")
-
-# PAD size in bytes (0-196) - only used when PAD socket is configured
-DAB_METADATA_SIZE = environment.get("DAB_METADATA_SIZE", default="")
 
 # Silence detection configuration
 # These have sensible defaults but can be overridden in .env
@@ -65,7 +57,7 @@ AUDIO_VALID_SECONDS =
 # Common file paths
 # These have sensible defaults but can be overridden in .env
 EMERGENCY_AUDIO_PATH =
-  environment.get("EMERGENCY_AUDIO_PATH", default="/audio/fallback.ogg")
+  environment.get("EMERGENCY_AUDIO_PATH", default="/audio/noodband.wav")
 SILENCE_CONTROL_PATH =
   environment.get("SILENCE_CONTROL_PATH", default="/silence_detection.txt")
 
