@@ -76,7 +76,7 @@ cat << "EOF"
         Sonicverse Audiostack Installer
 ==================================================
 EOF
-echo -e "${GREEN}⎎ Liquidsoap and StereoTool Installation${NC}\n"
+echo -e "${GREEN}⎎ Liquidsoap Installation${NC}\n"
 
 # Prompt user for input
 ask_user "STATION_CONFIG" "breeze" "Which station configuration would you like to use? (breeze)" "str"
