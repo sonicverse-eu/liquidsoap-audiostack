@@ -102,7 +102,7 @@ done
 echo -e "${BLUE}►► Downloading configuration files...${NC}"
 
 # Set configuration URL based on user choice
-if [ "${STATION_CONFIG}" == "zuidwest" ]; then
+if [ "${STATION_CONFIG}" == "breeze" ]; then
   LIQUIDSOAP_CONFIG_URL="${LIQUIDSOAP_CONFIG_URL_BREEZE}"
   LIQUIDSOAP_ENV_URL="${LIQUIDSOAP_ENV_URL_BREEZE}"
 fi
