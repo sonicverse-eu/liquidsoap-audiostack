@@ -22,7 +22,7 @@ services:
     user: "liquidsoap:liquidsoap"
 
   icecast:
-    image: lscr.io/linuxserver/icecast:latest
+    image: linuxserver/icecast:latest
     container_name: icecast
     environment:
       - TZ=Europe/Amsterdam
