@@ -11,10 +11,12 @@ ICECAST_PASS = environment.get("ICECAST_PASS")
 
 # Function to create a studio SRT input with silence detection and buffering
 def create_studio_input(~mount, ~port) =
-  # Create Icecast Input
+  # Create Harbor (SRT) Input - use the provided mount and port so each studio
+  # registers a unique mountpoint and port instead of the hardcoded "live".
   studio =
       input.harbor(
-        "live",
+        mount,
+        port=port,
         password=ICECAST_PASS
       )
 
