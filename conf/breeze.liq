@@ -26,7 +26,7 @@ output_icecast_stream(
     format = "mp3",
     %audio(
       codec = "libmp3lame",
-      b = 192k,
+      b = "#{ICECAST_BITRATE_MP3}k",
       ar = 48000,
       ac = 2,
       q = 0
