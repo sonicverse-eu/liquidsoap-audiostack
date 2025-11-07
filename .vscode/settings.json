@@ -1,0 +1,6 @@
+{
+    "conventionalCommits.scopes": [
+        "install-script",
+        "defaults"
+    ]
+}

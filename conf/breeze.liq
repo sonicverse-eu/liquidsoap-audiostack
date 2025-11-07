@@ -3,11 +3,10 @@
 
 # Include library configurations
 %include "lib/studio_inputs.liq"
-%include "lib/stereotool.liq"
 
 # Create the two studio inputs
-studio_a = create_studio_input(id="studio_a", port=SRT_PORT_PRIMARY)
-studio_b = create_studio_input(id="studio_b", port=SRT_PORT_SECONDARY)
+studio_a = create_studio_input(mount="studio_a", port=ICECAST_PORT_PRIMARY)
+studio_b = create_studio_input(mount="studio_b", port=ICECAST_SECONDARY)
 
 # Combine live inputs and fallback
 radio =
@@ -17,18 +16,9 @@ radio =
     [studio_a, studio_b, emergency_fallback]
   )
 
-# Create processed/unprocessed audio sources
-# When StereoTool is enabled (STEREOTOOL_LICENSE is set), it provides:
-# - Audio processing (AGC, compression, limiting, etc.)
-# - MicroMPX encoding for FM transmitters (available in StereoTool itself)
-# Two audio sources are available:
-# - 'radio': Unprocessed audio (direct from studio/fallback)
-# - 'radio_processed': Either StereoTool-processed audio (if enabled) or unprocessed audio (if disabled)
-radio_processed = create_processed_audio(radio)
 
 # Include output configurations
 %include "lib/icecast_outputs.liq"
-%include "lib/dab_output.liq"
 
 # Output a high bitrate mp3 stream using ffmpeg encoder
 output_icecast_stream(
@@ -42,7 +32,7 @@ output_icecast_stream(
       q = 0
     )
   ),
-  description="Hoge Kwaliteit Stream (192kbit MP3)",
+  description="HQ Stream (192kbit MP3)",
   mount=ICECAST_MOUNT_MP3,
   source=radio
 )
@@ -79,5 +69,3 @@ output_icecast_stream(
   source=radio
 )
 
-# Output to DAB+
-output_dab_stream(radio)
