@@ -6,7 +6,7 @@
 
 # Create the two studio inputs
 studio_a = create_studio_input(mount="studio_a", port=ICECAST_PORT_PRIMARY)
-studio_b = create_studio_input(mount="studio_b", port=ICECAST_SECONDARY)
+studio_b = create_studio_input(mount="studio_b", port=ICECAST_PORT_SECONDARY)
 
 # Combine live inputs and fallback
 radio =
