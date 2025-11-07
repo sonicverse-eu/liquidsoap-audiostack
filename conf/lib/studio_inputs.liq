@@ -18,9 +18,11 @@ def create_studio_input(~mount, ~port) =
         password=ICECAST_PASS
       )
 
-  studio.on_connect(fun () -> log_event(mount, "connected"), synchronous=false)
+  # on_connect/on_disconnect callbacks receive at least one argument (connection info)
+  # we ignore the argument but must accept it to satisfy the expected type
+  studio.on_connect(fun (_) -> log_event(mount, "connected"), synchronous=false)
   studio.on_disconnect(
-    fun () -> log_event(mount, "disconnected"),
+    fun (_) -> log_event(mount, "disconnected"),
     synchronous=false
   )
 
